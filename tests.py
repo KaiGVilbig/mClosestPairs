@@ -1,10 +1,27 @@
 import random
 import time
+import numpy as np
+from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
 from mClosestPairs import closestPairs  # Import the function from the other file
 
-# Trace Runs (Part c)
+# Define theoretical growth functions
+def linear(n, a):
+    return a * n
 
+def log_growth(n, a):
+    return a * np.log(n)
+
+def poly(n, a, k):
+    return a * n**k
+
+def exp_growth(n, a):
+    return a * np.exp(n)
+
+def nlogn_growth(n, a):
+    return a * n * np.log(n)
+
+# Trace Runs (Part c)
 def run_trace_tests():
     test_cases = [
         [(0, 0), (12, 30), (40, 50), (1, 2), (2, 5), (3, 4)],  # Small input
@@ -50,6 +67,41 @@ def plot_results(input_sizes, times):
 # Worst-Case Running Time Analysis (Part e)
 def analyze_results(input_sizes, times):
     print("\nAnalysis of the Running Time:")
+    
+    input_sizes = np.array(input_sizes)
+    times = np.array(times)
+
+    # Try curve fitting for different types of growth
+    try:
+        popt_linear, _ = curve_fit(linear, input_sizes, times)
+        print(f"Best fit for linear: O(n), with constant a = {popt_linear[0]:.4f}")
+    except:
+        print("Could not fit linear curve.")
+
+    try:
+        popt_log, _ = curve_fit(log_growth, input_sizes, times)
+        print(f"Best fit for logarithmic: O(log n), with constant a = {popt_log[0]:.4f}")
+    except:
+        print("Could not fit logarithmic curve.")
+
+    try:
+        popt_poly, _ = curve_fit(poly, input_sizes, times)
+        print(f"Best fit for polynomial: O(n^k), with constants a = {popt_poly[0]:.4f}, k = {popt_poly[1]:.4f}")
+    except:
+        print("Could not fit polynomial curve.")
+
+    try:
+        popt_exp, _ = curve_fit(exp_growth, input_sizes, times)
+        print(f"Best fit for exponential: O(2^n), with constant a = {popt_exp[0]:.4f}")
+    except:
+        print("Could not fit exponential curve.")
+    
+    try:
+        popt_exp, _ = curve_fit(nlogn_growth, input_sizes, times)
+        print(f"Best fit for exponential: O(n log n), with constant a = {popt_exp[0]:.4f}")
+    except:
+        print("Could not fit n log n curve.")
+    
     for i in range(1, len(input_sizes)):
         if times[i - 1] == 0:
             print(f"Skipping analysis for input size {input_sizes[i - 1]} because time recorded is 0.")
