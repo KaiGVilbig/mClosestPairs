@@ -87,7 +87,7 @@ def export_to_pdf(growth_results, plot_image):
 # Example testing script to evaluate the algorithm
 def test_algorithm():
     # Sample input sizes for testing
-    input_sizes = [10, 50, 100, 200, 500, 1000, 2000, 5000, 10000]
+    input_sizes = [10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000]
     
     # Record empirical times for each input size
     times = []
